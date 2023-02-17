@@ -87,20 +87,25 @@ def deleteBookPost():
 
 @app.route("/book/getBooks")
 def get_book():
-    #print('Naveen')
-    #print(request.form)
+    table_response = []
     try:
         db_connection = connection.MySQLConnection(**DB_CONFIG)
         db_cursor = db_connection.cursor()
-        sql_statement = "SELECT * FROM `book_info`"
-    
-        db_cursor.execute(sql_statement)
+        select_sql = "SELECT book_info.book_id, book_info.book_title, author_info.author_name, publisher_info.publisher_name, book_info.book_cost FROM book_info LEFT JOIN author_info ON (book_info.book_author = author_info.author_id) LEFT JOIN publisher_info ON (book_info.book_publisher = publisher_info.publisher_id)"
+        print(select_sql)
+  
+        db_cursor.execute(select_sql)
     
         output = db_cursor.fetchall()
-        
-        for x in output:
-            print(x)
-        
+        for data in output:
+            row_data = {
+                'book_id'        : data[0],
+                'book_title'     : data[1],
+                'author_name'    : data[2],
+                'publisher_name' : data[3],
+                'book_cost'      : data[4]
+            }
+            table_response.append(row_data)
     except connection.Error as e:
         print("Error reading data from MySQL table", e)
     finally:
@@ -108,5 +113,5 @@ def get_book():
             db_cursor.close()
             db_connection.close()
             print("MySQL connection is closed")
-    #return "<p>Python Assessment - Get Books</p>"
-    return render_template('get-books.html')
+    print(table_response)
+    return render_template('get-books.html', tableReponse = table_response)

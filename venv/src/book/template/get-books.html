@@ -1,8 +1,45 @@
 <html>
     <head>
         <title>Get Books</title>
+        <style>
+            table, th, td {
+                border: 1px solid;
+                border-collapse: collapse;
+                padding: 10px 20px;
+            }
+
+            th {
+                background-color: grey;
+            }
+
+        </style>
     </head>
     <body>
-        <h2> Get Book</h2>
+        <h2> Get Books</h2>
+
+        <br><br>        
+        <table>
+            <thead>
+                <th>Book ID</th>
+                <th>Book Title</th>
+                <th>Author Name</th>
+                <th>Publisher Name</th>
+                <th>Book Cost</th>
+            </thead>
+
+            <tbody>
+                {% for tableData in tableReponse %}
+                <tr>
+                    <td>{{ tableData.book_id }}</td>
+                    <td>{{ tableData.book_title }}</td>
+                    <td>{{ tableData.author_name }}</td>
+                    <td>{{ tableData.publisher_name }}</td>
+                    <td>{{ tableData.book_cost }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        
     </body>
 </html>
