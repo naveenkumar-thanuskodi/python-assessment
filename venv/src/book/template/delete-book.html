@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Delete Books</title>
+    </head>
+    <body>
+        <h2> Delete Book </h2>
+        <br><br>
+
+        <div>
+            <form action="deleteBooks" method="POST">
+                <label for="bookId">Enter Book ID which need to be Delete:</label>
+                <br><br>
+
+                <input type="text" id="book_id" name="bookId" placeholder="book-id" required>
+                <br><br>
+
+                <input type="submit" value="Delete">
+              </form> 
+        </div>
+
+        <br>
+        <div>
+            <span>{{msg}}</span>
+        </div>
+
+    </body>
+</html>
