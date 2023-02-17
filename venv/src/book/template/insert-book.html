@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Insert Book</title>
+    </head>
+    <body>
+        <h2> Insert Book </h2>
+        <br><br>
+
+        <div>
+            <form action="insertBook" method="POST">
+                <div>
+                    <label for="bookId">Book ID</label>
+                    <br><br>
+
+                    <input type="text" id="book_id" name="bookId" placeholder="book_id" required>
+                    <br><br>
+                </div>
+
+                <div>
+                    <label for="bookName">Book Name</label>
+                    <br><br>
+    
+                    <input type="text" id="book_name" name="bookName" placeholder="book_name" required>
+                    <br><br>
+                </div>
+
+                <div>
+                    <label for="bookAuthor">Book Author</label>
+                    <br><br>
+    
+                    <input type="text" id="book_author" name="bookAuthor" placeholder="book_author" required>
+                    <br><br>
+                </div>
+
+                <div>
+                    <label for="bookPublisher">Book Publisher</label>
+                    <br><br>
+    
+                    <input type="text" id="book_publisher" name="bookPublisher" placeholder="book_publisher" required>
+                    <br><br>
+                </div>
+
+                <div>
+                    <label for="bookCost">Book Cost</label>
+                    <br><br>
+    
+                    <input type="text" id="book_cost" name="bookCost" placeholder="book_cost" required>
+                    <br><br>
+                </div>
+
+                <input type="submit" value="Insert">
+              </form> 
+        </div>
+
+        <br>
+        <div>
+            <span>{{msg}}</span>
+        </div>
+
+    </body>
+</html>

@@ -15,12 +15,50 @@ DB_CONFIG = {
 def home():
     return render_template('index.html')
 
-@app.route("/book/deleteBooks", methods=['GET'])
+#INSERT
+@app.route("/book/insertBook", methods=['GET'])
+def insertBookGet():
+    return render_template('insert-book.html')
+
+
+@app.route("/book/insertBook", methods=['POST'])
+def insertBookPost():
+    insert_book_id = request.form['bookId']
+    insert_book_name = request.form['bookName']
+    insert_book_author = request.form['bookAuthor']
+    insert_book_publisher = request.form['bookPublisher']
+    insert_book_cost = request.form['bookCost']
+    print('insert_book_id = ', insert_book_id)
+    insert_res  = ''
+
+    try:
+        db_connection = connection.MySQLConnection(**DB_CONFIG)
+        db_cursor = db_connection.cursor()
+        insert_sql = "INSERT INTO `book_info` (`book_id`, `book_title`, `book_cost`, `book_author`, `book_publisher`) VALUES ('"+insert_book_id+"', '"+insert_book_name+"', '"+insert_book_author+"', '"+insert_book_publisher+"', '"+insert_book_cost+"');"
+        print(insert_sql)
+        res = db_cursor.execute(insert_sql)
+        db_connection.commit()
+        print(res)
+        insert_res  = 'Book id (' + insert_book_id + ') inserted sussessfully'
+       
+    except connection.Error as e:
+        insert_res  = 'Error in insert books = ' + insert_book_id
+        print("Error insert data to MySQL table", e)
+    finally:
+        if db_connection.is_connected():
+            db_cursor.close()
+            db_connection.close()
+            print("MySQL connection is closed")
+
+    return render_template('insert-book.html', msg = insert_res)
+
+#DELETE
+@app.route("/book/deleteBook", methods=['GET'])
 def deleteBookGet():
     return render_template('delete-book.html')
 
 
-@app.route("/book/deleteBooks", methods=['POST'])
+@app.route("/book/deleteBook", methods=['POST'])
 def deleteBookPost():
     delete_book_id = request.form['bookId']
     print('deleteBookId = ', delete_book_id)
