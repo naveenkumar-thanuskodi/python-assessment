@@ -18,7 +18,49 @@ def home():
 #INSERT
 @app.route("/book/insertBook", methods=['GET'])
 def insertBookGet():
-    return render_template('insert-book.html')
+    table_response = {}
+    try:
+        db_connection = connection.MySQLConnection(**DB_CONFIG)
+        db_cursor = db_connection.cursor()
+        author_sql = "SELECT author_id, author_name FROM author_info"
+        print(author_sql)
+  
+        db_cursor.execute(author_sql)
+    
+        author_output = db_cursor.fetchall()
+        author_row = []
+        for data in author_output:
+            author_data = {
+                'author_id'   : data[0],
+                'author_name' : data[1]
+            }
+            author_row.append(author_data)        
+        table_response['author_data'] = author_row
+        
+        publisher_sql = "SELECT publisher_id, publisher_name FROM publisher_info"
+        print(publisher_sql)
+  
+        db_cursor.execute(publisher_sql)
+    
+        publisher_output = db_cursor.fetchall()
+        publisher_row = []
+        for data in publisher_output:
+            publisher_data = {
+                'publisher_id'   : data[0],
+                'publisher_name' : data[1]
+            }
+            publisher_row.append(publisher_data)  
+        table_response['publisher_data'] = publisher_row
+    except connection.Error as e:
+        print("Error reading data from MySQL table", e)
+    finally:
+        if db_connection.is_connected():
+            db_cursor.close()
+            db_connection.close()
+            print("MySQL connection is closed")
+
+    print(table_response)
+    return render_template('insert-book.html', tableResponse = table_response)
 
 
 @app.route("/book/insertBook", methods=['POST'])
@@ -34,13 +76,12 @@ def insertBookPost():
     try:
         db_connection = connection.MySQLConnection(**DB_CONFIG)
         db_cursor = db_connection.cursor()
-        insert_sql = "INSERT INTO `book_info` (`book_id`, `book_title`, `book_cost`, `book_author`, `book_publisher`) VALUES ('"+insert_book_id+"', '"+insert_book_name+"', '"+insert_book_author+"', '"+insert_book_publisher+"', '"+insert_book_cost+"');"
+        insert_sql = "INSERT INTO `book_info` (`book_id`, `book_title`, `book_author`, `book_publisher`, `book_cost`) VALUES ('"+insert_book_id+"', '"+insert_book_name+"', '"+insert_book_author+"', '"+insert_book_publisher+"', '"+insert_book_cost+"');"
         print(insert_sql)
         res = db_cursor.execute(insert_sql)
         db_connection.commit()
         print(res)
-        insert_res  = 'Book id (' + insert_book_id + ') inserted sussessfully'
-       
+        insert_res  = 'Book id (' + insert_book_id + ') inserted sussessfully' 
     except connection.Error as e:
         insert_res  = 'Error in insert books = ' + insert_book_id
         print("Error insert data to MySQL table", e)
@@ -72,8 +113,7 @@ def deleteBookPost():
         res = db_cursor.execute(delete_sql)
         db_connection.commit()
         print(res)
-        delete_res  = 'Book id (' + delete_book_id + ') deleted sussessfully'
-       
+        delete_res  = 'Book id (' + delete_book_id + ') deleted sussessfully' 
     except connection.Error as e:
         delete_res  = 'Error in delete books = ' + delete_book_id
         print("Error deleting data from MySQL table", e)

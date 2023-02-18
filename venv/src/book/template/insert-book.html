@@ -1,61 +1,83 @@
 <html>
     <head>
         <title>Insert Book</title>
+        <style>
+            .button-cls {
+                color: #fff;
+                background-color:#0455a3;
+                padding: 10px;
+                border: 2px solid;
+                border-radius: 5px;
+                width: 100px;
+            }
+        </style>
     </head>
     <body>
         <h2> Insert Book </h2>
         <br><br>
-
+                           
+        {% if msg == undefined %}
+        
         <div>
             <form action="insertBook" method="POST">
                 <div>
                     <label for="bookId">Book ID</label>
-                    <br><br>
+                    <br>
 
                     <input type="number" id="book_id" name="bookId" placeholder="book_id" required>
-                    <br><br>
                 </div>
+                <br><br>
 
                 <div>
                     <label for="bookName">Book Name</label>
-                    <br><br>
+                    <br>
     
                     <input type="text" id="book_name" name="bookName" placeholder="book_name" required>
-                    <br><br>
                 </div>
+                <br><br>
 
                 <div>
                     <label for="bookAuthor">Book Author</label>
-                    <br><br>
-    
-                    <input type="number" id="book_author" name="bookAuthor" placeholder="book_author" required>
-                    <br><br>
+                    <br>
+                    
+                    <select id="book_author" name="bookAuthor">
+                    {% for authorData in tableResponse['author_data'] %}
+                        <option value={{ authorData.author_id }}>{{ authorData.author_name }}</option>                    
+                    {% endfor %}    
+                    </select>
                 </div>
+                <br><br>
 
                 <div>
                     <label for="bookPublisher">Book Publisher</label>
-                    <br><br>
-    
-                    <input type="number" id="book_publisher" name="bookPublisher" placeholder="book_publisher" required>
-                    <br><br>
+                    <br>
+                    
+                    <select id="book_publisher" name="bookPublisher">
+                        {% for publisherData in tableResponse['publisher_data'] %}
+                            <option value={{ publisherData.publisher_id }}>{{ publisherData.publisher_name }}</option>                    
+                        {% endfor %}    
+                    </select>
                 </div>
+                <br><br>
 
                 <div>
                     <label for="bookCost">Book Cost</label>
-                    <br><br>
+                    <br>
     
                     <input type="number" id="book_cost" name="bookCost" placeholder="book_cost" required>
-                    <br><br>
                 </div>
-
-                <input type="submit" value="Insert">
-              </form> 
+                <br><br>
+                
+                <input type="submit" class="button-cls" value="Insert">
+            </form> 
         </div>
-
-        <br>
-        <div>
-            <span>{{msg}}</span>
-        </div>
-
+        {% endif %}
+        
+        {% if msg != '' %}
+        <span>{{msg}}</span> 
+        {% endif %} 
+        
+        <br><br>
+        <button onclick="window.location.href='index'" class="button-cls">Home</button>
     </body>
 </html>
